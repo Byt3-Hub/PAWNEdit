@@ -1,0 +1,10 @@
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\bin\Debug\SciLexer.dll
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\bin\Debug\PAWNEdit.exe
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\bin\Debug\PAWNEdit.pdb
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\bin\Debug\ScintillaNET.dll
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\PAWNEdit.Form1.resources
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\PAWNEdit.Properties.Resources.resources
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\PAWNEdit.csproj.GenerateResource.Cache
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\PAWNEdit.exe
+C:\Users\Byt3\Desktop\Git Repositories\pawnedit\PAWNEdit\obj\Debug\PAWNEdit.pdb
