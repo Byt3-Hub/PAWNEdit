@@ -12,6 +12,7 @@
     <AssemblyName>PAWNEdit</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>pawn.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,6 +82,7 @@
     <Compile Include="Tabs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="pawn.ico" />
     <Content Include="SciLexer.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -104,6 +104,7 @@ namespace PAWNEdit
                 newtab.scintilla.Name = "buildScintilla" + title;
                 newtab.scintilla.Size = new System.Drawing.Size(567, 356);
                 newtab.scintilla.TabIndex = 2;
+                newtab.scintilla.Indentation.TabWidth = 4;
 
                 // split
                 newtab.split.Dock = System.Windows.Forms.DockStyle.Bottom;

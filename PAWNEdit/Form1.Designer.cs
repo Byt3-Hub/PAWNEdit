@@ -105,6 +105,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.replace4SpacesWithTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -527,7 +528,8 @@
             this.toolStripSeparator10,
             this.removeExcessSToolStripMenuItem,
             this.indentCodeToolStripMenuItem,
-            this.unIndentCoolToolStripMenuItem});
+            this.unIndentCoolToolStripMenuItem,
+            this.replace4SpacesWithTabsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -535,56 +537,56 @@
             // skinChooserToolStripMenuItem
             // 
             this.skinChooserToolStripMenuItem.Name = "skinChooserToolStripMenuItem";
-            this.skinChooserToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.skinChooserToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.skinChooserToolStripMenuItem.Text = "Skins";
             // 
             // vehiclesToolStripMenuItem
             // 
             this.vehiclesToolStripMenuItem.Name = "vehiclesToolStripMenuItem";
-            this.vehiclesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.vehiclesToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.vehiclesToolStripMenuItem.Text = "Vehicles";
             // 
             // objectsToolStripMenuItem
             // 
             this.objectsToolStripMenuItem.Name = "objectsToolStripMenuItem";
-            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.objectsToolStripMenuItem.Text = "Objects";
             // 
             // positionsToolStripMenuItem
             // 
             this.positionsToolStripMenuItem.Name = "positionsToolStripMenuItem";
-            this.positionsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.positionsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.positionsToolStripMenuItem.Text = "Positions";
             // 
             // colorToolStripMenuItem
             // 
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.colorToolStripMenuItem.Text = "Colors";
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(189, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(216, 6);
             // 
             // removeExcessSToolStripMenuItem
             // 
             this.removeExcessSToolStripMenuItem.Name = "removeExcessSToolStripMenuItem";
-            this.removeExcessSToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.removeExcessSToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.removeExcessSToolStripMenuItem.Text = "Remove Excess Spaces";
             this.removeExcessSToolStripMenuItem.Click += new System.EventHandler(this.removeExcessSToolStripMenuItem_Click);
             // 
             // indentCodeToolStripMenuItem
             // 
             this.indentCodeToolStripMenuItem.Name = "indentCodeToolStripMenuItem";
-            this.indentCodeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.indentCodeToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.indentCodeToolStripMenuItem.Text = "Indent Code";
             this.indentCodeToolStripMenuItem.Click += new System.EventHandler(this.indentCodeToolStripMenuItem_Click);
             // 
             // unIndentCoolToolStripMenuItem
             // 
             this.unIndentCoolToolStripMenuItem.Name = "unIndentCoolToolStripMenuItem";
-            this.unIndentCoolToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.unIndentCoolToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.unIndentCoolToolStripMenuItem.Text = "Un-Indent Code";
             this.unIndentCoolToolStripMenuItem.Click += new System.EventHandler(this.unIndentCoolToolStripMenuItem_Click);
             // 
@@ -707,6 +709,13 @@
             this.listBox1.Size = new System.Drawing.Size(194, 169);
             this.listBox1.TabIndex = 0;
             // 
+            // replace4SpacesWithTabsToolStripMenuItem
+            // 
+            this.replace4SpacesWithTabsToolStripMenuItem.Name = "replace4SpacesWithTabsToolStripMenuItem";
+            this.replace4SpacesWithTabsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.replace4SpacesWithTabsToolStripMenuItem.Text = "Replace 4 Spaces With Tabs";
+            this.replace4SpacesWithTabsToolStripMenuItem.Click += new System.EventHandler(this.replace4SpacesWithTabsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -719,6 +728,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "PAWNEdit";
             this.contextMenuStrip1.ResumeLayout(false);
@@ -814,6 +824,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListBox listBox1;
         public System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.ToolStripMenuItem replace4SpacesWithTabsToolStripMenuItem;
     }
 }
 

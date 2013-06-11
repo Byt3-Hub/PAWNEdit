@@ -172,30 +172,139 @@ namespace PAWNEdit
             catch (Exception ex) { CaughtException(ex); }
         }
 
+        private void replace4SpacesWithTabsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        string text = null;
+                        bool streamcomment = false;
+                        bool instring = false;
+                        int ind = 0;
+                        for (int lineind = 0; lineind < tab.scintilla.Lines.Count; lineind++)
+                        {
+                            text = tab.scintilla.Lines[lineind].Text;
+                            if (text.Length > 0)
+                            {
+                                // Fixes for comments.
+                                if (text.StartsWith("//"))
+                                {
+                                    continue;
+                                }
+                                if (text.IndexOf("/*") != -1 && text.IndexOf("*/") == -1)
+                                {
+                                    streamcomment = true;
+                                }
+                                else if (text.IndexOf("*/") != -1 && text.IndexOf("/*") == -1)
+                                {
+                                    streamcomment = false;
+                                }
+                                if (!streamcomment)
+                                {
+                                    // Remove new lines for the local variable.
+                                    if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
+                                    if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
+
+                                reset:
+                                    ind = 0;
+                                    foreach (char ch in text)
+                                    {
+                                        if (text.Length > 0)
+                                        {
+                                            if (ch == '\"')
+                                            {
+                                                if (instring)
+                                                {
+                                                    instring = false;
+                                                }
+                                                else
+                                                {
+                                                    instring = true;
+                                                }
+                                            }
+                                        }
+                                        if (text.Length > ind + 4 && !instring)
+                                        {
+                                            if (text.Substring(ind, 4).CompareTo("    ") == 0)
+                                            {
+                                                text = text.Remove(ind, 4);
+                                                text = text.Insert(ind, "\t");
+                                                instring = false;
+                                                goto reset;
+                                            }
+                                        }
+                                        ind++;
+                                    }
+                                    tab.scintilla.Lines[lineind].Text = text;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
         // Functions
         public void UnIndentScintillaText(ScintillaNET.Scintilla scintilla)
         {
             try
             {
                 string text = null;
+                bool streamcomment = false;
+                int ind = 0;
                 for (int lineind = 0; lineind < scintilla.Lines.Count; lineind++)
                 {
                     text = scintilla.Lines[lineind].Text;
                     if (text.Length > 0)
                     {
-                        // Remove new lines for the local variable.
-                        if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
-                        if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
-
-                        foreach (char ch in text)
+                        // Fixes for comments.
+                        if (text.StartsWith("//"))
                         {
-                            if (text.Length > 0)
-                            {
-                                if (ch != '\t' && ch != ' ') break;
-                                text = text.Remove(0, 1);
-                            }
+                            continue;
                         }
-                        scintilla.Lines[lineind].Text = text;
+                        if (text.IndexOf("/*") != -1 && text.IndexOf("*/") == -1)
+                        {
+                            streamcomment = true;
+                        }
+                        else if (text.IndexOf("*/") != -1 && text.IndexOf("/*") == -1)
+                        {
+                            streamcomment = false;
+                        }
+
+                        // The unindenting.
+                        if (!streamcomment)
+                        {
+                            // Remove new lines for the local variable.
+                            if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
+                            if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
+
+                            // Unindent.
+                            ind = 0;
+                            foreach (char ch in text)
+                            {
+                                if (text.Length > ind + 1)
+                                {
+                                    if (text.Substring(ind, 2).CompareTo("//") == 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (text.Length > 0)
+                                {
+                                    if (ch != '\t' && ch != ' ') break;
+                                    text = text.Remove(0, 1);
+                                }
+                                ind++;
+                            }
+
+                            // Set the line.
+                            scintilla.Lines[lineind].Text = text;
+                        }
                     }
                 }
             }
@@ -213,57 +322,162 @@ namespace PAWNEdit
                 string text = null;
                 int tabind = 0;
                 int tabincdec = 0;
+                bool streamcomment = false;
+                bool instring = false;
+                int ind = 0;
                 for (int lineind = 0; lineind < scintilla.Lines.Count; lineind++)
                 {
                     text = scintilla.Lines[lineind].Text;
                     if (text.Length > 0)
                     {
-                        // Remove excess spaces and new lines for the local variable.
-                        if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
-                        if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
-                        while (text.EndsWith(" ") || text.EndsWith("\t"))
+                        // Fixes for comments.
+                        if (text.StartsWith("//"))
                         {
-                            if (text.Length < 1) break;
-                            text = text.Substring(0, text.Length - 1);
+                            continue;
+                        }
+                        if (text.IndexOf("/*") != -1 && text.IndexOf("*/") == -1)
+                        {
+                            streamcomment = true;
+                        }
+                        else if (text.IndexOf("*/") != -1 && text.IndexOf("/*") == -1)
+                        {
+                            streamcomment = false;
                         }
 
-                        for (int i = 0; i < tabind; i++)
+                        // The indenting.
+                        if (!streamcomment)
                         {
-                            text = text.Insert(0, "\t");
-                        }
-
-                        tabincdec = 0;
-                        foreach (char ch in text)
-                        {
-                            if (ch == '{')
+                            // Remove excess spaces and new lines for the local variable.
+                            if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
+                            if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
+                            while (text.EndsWith(" ") || text.EndsWith("\t"))
                             {
-                                tabincdec++;
+                                if (text.Length < 1) break;
+                                text = text.Substring(0, text.Length - 1);
                             }
-                            else if (ch == '}')
-                            {
-                                tabincdec--;
-                            }
-                        }
-                        tabind += tabincdec;
+                            // If the tab index is below 0, set it to 0.
+                            if (tabind < 0) tabind = 0;
 
-                        // Remove wrong tabs on closing braces (assuming there was one on this line)
-                        if (tabincdec < 0)
-                        {
-                            bool removetab = true;
+                            // Add the current tab index.
+                            for (int i = 0; i < tabind; i++)
+                            {
+                                text = text.Insert(0, "\t");
+                            }
+
+                            // Indent.
+                            tabincdec = 0;
+                            ind = 0;
                             foreach (char ch in text)
                             {
-                                if (ch != '\t' && ch != '}')
+                                if (ch == '\"')
                                 {
-                                    removetab = false;
-                                    break;
+                                    if (instring)
+                                    {
+                                        instring = false;
+                                    }
+                                    else
+                                    {
+                                        instring = true;
+                                    }
+                                }
+                                if (text.Length > ind + 1)
+                                {
+                                    if (text.Substring(ind, 2).CompareTo("//") == 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (!instring)
+                                {
+                                    if (ch == '{')
+                                    {
+                                        tabincdec++;
+                                    }
+                                    else if (ch == '}')
+                                    {
+                                        tabincdec--;
+                                    }
+                                }
+                                ind++;
+                            }
+
+                            // A (failed) attempt to fix indentation for code like this
+                            // if(1 == 1)
+                            // int i = 0;
+                            // else
+                            // int i = 1;
+
+                            /*if (lineind < scintilla.Lines.Count)
+                            {
+                                if (text.IndexOf("if") != -1 || text.IndexOf("else") != -1)
+                                {
+                                    text2 = scintilla.Lines[lineind + 1].Text;
+                                    if (text2.EndsWith("\r\n")) text2 = text2.Substring(0, text2.Length - 2);
+                                    if (text2.EndsWith("\n")) text2 = text2.Substring(0, text2.Length - 1);
+
+                                    bool inc = true; // increment or no
+                                    foreach (char ch in text2)
+                                    {
+                                        if (ch == '{')
+                                        {
+                                            inc = false;
+                                        }
+                                        if (ch == '}')
+                                        {
+                                            inc = true;
+                                        }
+                                    }
+                                    foreach (char ch in text)
+                                    {
+                                        if (ch == '{')
+                                        {
+                                            inc = false;
+                                        }
+                                        if (ch == '}')
+                                        {
+                                            inc = true;
+                                        }
+                                    }
+                                    if (inc)
+                                    {
+                                        MessageBox.Show("line: " + lineind + " " + text2);
+                                        text2 = text2.Insert(0, "\t");
+                                        scintilla.Lines[lineind + 1].Text = text2;
+                                        MessageBox.Show("line2: " + lineind + " " + text2);
+                                    }
+            
+                                }
+                            }*/
+
+                            // Set the new tab index.
+                            tabind += tabincdec;
+
+                            // Remove wrong tabs on closing braces (assuming there was one on this line)
+                            if (tabincdec < 0)
+                            {
+                                bool removetab = true;
+                                foreach (char ch in text)
+                                {
+                                    if (ch != '\t' && ch != '}')
+                                    {
+                                        removetab = false;
+                                        break;
+                                    }
+                                    else if (ch == '}')
+                                    {
+                                        removetab = true;
+                                        break;
+                                    }
+                                }
+                                if (removetab && text.IndexOf("\t") >= 0)
+                                {
+                                    text = text.Remove(text.IndexOf("\t"), 1);
                                 }
                             }
-                            if (removetab)
-                            {
-                                text = text.Remove(text.IndexOf("\t"), 1);
-                            }
+
+                            // Set the line.
+                            scintilla.Lines[lineind].Text = text;
                         }
-                        scintilla.Lines[lineind].Text = text;
                     }
                 }
             }
