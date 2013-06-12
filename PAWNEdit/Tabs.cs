@@ -24,14 +24,14 @@ namespace PAWNEdit
 {
     public class Tabs
     {
-        public struct Tab_t
+        public class Tab_t
         {
             // Controls
-            public TabPage page;
-            public Scintilla scintilla;
-            public GroupBox groupbox;
-            public RichTextBox build;
-            public Splitter split;
+            public TabPage page = new TabPage();
+            public Scintilla scintilla = new Scintilla();
+            public GroupBox groupbox = new GroupBox();
+            public RichTextBox build = new RichTextBox();
+            public Splitter split = new Splitter();
 
             // File info
             public string Filename;
@@ -41,7 +41,8 @@ namespace PAWNEdit
         public List<Tab_t> tabs = new List<Tab_t>();
 
         private Form1 mainform;
-        private Build builder;
+        private Build build;
+        private Settings settings;
 
         // Constructor
         public Tabs(Form1 form)
@@ -49,9 +50,14 @@ namespace PAWNEdit
             try
             {
                 this.mainform = form;
-                this.builder = new Build(form);
             }
             catch(Exception ex) { form.CaughtException(ex); }
+        }
+
+        public void Update()
+        {
+            this.build = mainform.build;
+            this.settings = mainform.settings;
         }
 
         public void NewTab()
@@ -106,6 +112,9 @@ namespace PAWNEdit
                 newtab.scintilla.TabIndex = 2;
                 newtab.scintilla.Indentation.TabWidth = 4;
 
+                // Style list - http://scintillanet.codeplex.com/SourceControl/changeset/view/99922#1941361
+                newtab.scintilla.ConfigurationManager.Language = "cpp"; // Make this Pawn later.
+
                 // split
                 newtab.split.Dock = System.Windows.Forms.DockStyle.Bottom;
                 newtab.split.Location = new System.Drawing.Point(3, 359);
@@ -122,10 +131,11 @@ namespace PAWNEdit
                 tabs.Add(newtab);
 
                 mainform.tabControl1.SelectedIndex++;
+
+                UpdateTabs();
             }
             catch (Exception ex) { mainform.CaughtException(ex); }
         }
-
 
         public void CloseTab(TabPage page)
         {
@@ -143,6 +153,99 @@ namespace PAWNEdit
                         mainform.FreeControl(rtab.page);
                         tabs.Remove(rtab);
                         break;
+                    }
+                }
+            }
+            catch (Exception ex) { mainform.CaughtException(ex); }
+        }
+
+        public void UpdateTabs()
+        {
+            try
+            {
+                foreach (Tab_t tab in tabs)
+                {
+                    if (tab.scintilla != null)
+                    {
+                        // Default
+                        tab.scintilla.Styles[0].Font = settings.settings.defaulttext.font;
+                        tab.scintilla.Styles[0].ForeColor = settings.settings.defaulttext.forecolor;
+                        tab.scintilla.Styles[0].BackColor = settings.settings.defaulttext.backcolor;
+
+                        // Line Comment
+                        tab.scintilla.Styles[1].Font = settings.settings.linecomment.font;
+                        tab.scintilla.Styles[1].ForeColor = settings.settings.linecomment.forecolor;
+                        tab.scintilla.Styles[1].BackColor = settings.settings.linecomment.backcolor;
+
+                        // Stream Comment
+                        tab.scintilla.Styles[2].Font = settings.settings.streamcomment.font;
+                        tab.scintilla.Styles[2].ForeColor = settings.settings.streamcomment.forecolor;
+                        tab.scintilla.Styles[2].BackColor = settings.settings.streamcomment.backcolor;
+
+                        // Document Comment
+                        tab.scintilla.Styles[3].Font = settings.settings.doccomment.font;
+                        tab.scintilla.Styles[3].ForeColor = settings.settings.doccomment.forecolor;
+                        tab.scintilla.Styles[3].BackColor = settings.settings.doccomment.backcolor;
+
+                        // Number
+                        tab.scintilla.Styles[4].Font = settings.settings.number.font;
+                        tab.scintilla.Styles[4].ForeColor = settings.settings.number.forecolor;
+                        tab.scintilla.Styles[4].BackColor = settings.settings.number.backcolor;
+
+                        // Keywords
+                        tab.scintilla.Styles[5].Font = settings.settings.keyword.font;
+                        tab.scintilla.Styles[5].ForeColor = settings.settings.keyword.forecolor;
+                        tab.scintilla.Styles[5].BackColor = settings.settings.keyword.backcolor;
+
+                        // String
+                        tab.scintilla.Styles[6].Font = settings.settings.str.font;
+                        tab.scintilla.Styles[6].ForeColor = settings.settings.str.forecolor;
+                        tab.scintilla.Styles[6].BackColor = settings.settings.str.backcolor;
+
+                        // Character
+                        tab.scintilla.Styles[7].Font = settings.settings.character.font;
+                        tab.scintilla.Styles[7].ForeColor = settings.settings.character.forecolor;
+                        tab.scintilla.Styles[7].BackColor = settings.settings.character.backcolor;
+
+                        // Preprocessor
+                        tab.scintilla.Styles[9].Font = settings.settings.preprocessor.font;
+                        tab.scintilla.Styles[9].ForeColor = settings.settings.preprocessor.forecolor;
+                        tab.scintilla.Styles[9].BackColor = settings.settings.preprocessor.backcolor;
+
+                        // Operator
+                        tab.scintilla.Styles[10].Font = settings.settings.operat.font;
+                        tab.scintilla.Styles[10].ForeColor = settings.settings.operat.forecolor;
+                        tab.scintilla.Styles[10].BackColor = settings.settings.operat.backcolor;
+
+                        // Identifier
+                        tab.scintilla.Styles[11].Font = settings.settings.identifier.font;
+                        tab.scintilla.Styles[11].ForeColor = settings.settings.identifier.forecolor;
+                        tab.scintilla.Styles[11].BackColor = settings.settings.identifier.backcolor;
+
+                        // String EOL
+                        tab.scintilla.Styles[12].Font = settings.settings.stringeol.font;
+                        tab.scintilla.Styles[12].ForeColor = settings.settings.stringeol.forecolor;
+                        tab.scintilla.Styles[12].BackColor = settings.settings.stringeol.backcolor;
+
+                        // Verbatim
+                        tab.scintilla.Styles[13].Font = settings.settings.verbatim.font;
+                        tab.scintilla.Styles[13].ForeColor = settings.settings.verbatim.forecolor;
+                        tab.scintilla.Styles[13].BackColor = settings.settings.verbatim.backcolor;
+
+                        // Regular Expression
+                        tab.scintilla.Styles[14].Font = settings.settings.regex.font;
+                        tab.scintilla.Styles[14].ForeColor = settings.settings.regex.forecolor;
+                        tab.scintilla.Styles[14].BackColor = settings.settings.regex.backcolor;
+
+                        // Comment line doc? or stream doc?
+                        tab.scintilla.Styles[15].Font = settings.settings.doclinecomment.font;
+                        tab.scintilla.Styles[15].ForeColor = settings.settings.doclinecomment.forecolor;
+                        tab.scintilla.Styles[15].BackColor = settings.settings.doclinecomment.backcolor;
+
+                        // Keywords 2
+                        tab.scintilla.Styles[16].Font = settings.settings.keyword2.font;
+                        tab.scintilla.Styles[16].ForeColor = settings.settings.keyword2.forecolor;
+                        tab.scintilla.Styles[16].BackColor = settings.settings.keyword2.backcolor;
                     }
                 }
             }

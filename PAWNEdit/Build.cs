@@ -21,9 +21,11 @@ using System.Diagnostics;
 
 namespace PAWNEdit
 {
-    class Build
+    public class Build
     {
         private Form1 mainform;
+        private Tabs tabs;
+        private Settings settings;
 
         // Constructor
         public Build(Form1 form)
@@ -34,7 +36,12 @@ namespace PAWNEdit
             }
             catch(Exception ex) { form.CaughtException(ex); }
         }
-        
+
+        public void Update()
+        {
+            this.tabs = mainform.tabs;
+            this.settings = mainform.settings;
+        }
         // Functions
         public void BuildFile(RichTextBox buildbox, string filename, string directory)
         {

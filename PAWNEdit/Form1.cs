@@ -28,223 +28,26 @@ namespace PAWNEdit
         [DllImport("user32.dll")]
         static extern bool GetCaretPos(out Point lpPoint);
 
-        private Tabs tabs;
-        private Build build;
+        public Tabs tabs;
+        public Build build;
+        public Settings settings;
 
         // Constructor
-        public Form1()        
+        public Form1()
         {
             try
             {
                 InitializeComponent();
                 LoadIncludes();
-                this.build = new Build(this);
                 this.tabs = new Tabs(this);
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
+                this.build = new Build(this);
+                this.settings = new Settings(this);
 
-        // Events
-        private void newTabToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                tabs.NewTab();
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
+                tabs.Update();
+                build.Update();
+                settings.Update();
 
-        private void closeTabToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (tabControl1.SelectedIndex > -1)
-                {
-                    tabs.CloseTab(tabControl1.SelectedTab);
-                }
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-        private void closeEveryTabButCurrentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedIndex > -1)
-            {
-                try
-                {
-                    TabPage cur = tabControl1.SelectedTab;
-                    reiterate:
-                    foreach (Tabs.Tab_t tab in tabs.tabs)
-                    {
-                        if (tab.page != cur)
-                        {
-                            tabs.CloseTab(tab.page);
-                            goto reiterate;
-                        }
-                    }
-                    tabControl1.SelectedTab = cur;
-                }
-                catch (Exception ex) { CaughtException(ex); }
-            }
-        }
-
-        private void toolStripButton4_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        Thread proc = new Thread(() => build.BuildFile(tab.build, tab.Filename, tab.Filedir));
-                        proc.Start();
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-
-        private void removeExcessSToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        string text = null;
-                        for (int lineind = 0; lineind < tab.scintilla.Lines.Count; lineind++)
-                        {
-                            text = tab.scintilla.Lines[lineind].Text;
-                            if (text.Length > 0)
-                            {
-                                if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
-                                if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
-                                while (text.EndsWith(" ") || text.EndsWith("\t"))
-                                {
-                                    if (text.Length < 1) break;
-                                    text = text.Substring(0, text.Length - 1);
-                                }
-                                tab.scintilla.Lines[lineind].Text = text;
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-        private void indentCodeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        IndentScintillaText(tab.scintilla);
-                    }
-                }
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-
-        private void unIndentCoolToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        UnIndentScintillaText(tab.scintilla);
-                    }
-                }
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-        private void replace4SpacesWithTabsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        string text = null;
-                        bool streamcomment = false;
-                        bool instring = false;
-                        int ind = 0;
-                        for (int lineind = 0; lineind < tab.scintilla.Lines.Count; lineind++)
-                        {
-                            text = tab.scintilla.Lines[lineind].Text;
-                            if (text.Length > 0)
-                            {
-                                // Fixes for comments.
-                                if (text.StartsWith("//"))
-                                {
-                                    continue;
-                                }
-                                if (text.IndexOf("/*") != -1 && text.IndexOf("*/") == -1)
-                                {
-                                    streamcomment = true;
-                                }
-                                else if (text.IndexOf("*/") != -1 && text.IndexOf("/*") == -1)
-                                {
-                                    streamcomment = false;
-                                }
-                                if (!streamcomment)
-                                {
-                                    // Remove new lines for the local variable.
-                                    if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
-                                    if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
-
-                                reset:
-                                    ind = 0;
-                                    foreach (char ch in text)
-                                    {
-                                        if (text.Length > 0)
-                                        {
-                                            if (ch == '\"')
-                                            {
-                                                if (instring)
-                                                {
-                                                    instring = false;
-                                                }
-                                                else
-                                                {
-                                                    instring = true;
-                                                }
-                                            }
-                                        }
-                                        if (text.Length > ind + 4 && !instring)
-                                        {
-                                            if (text.Substring(ind, 4).CompareTo("    ") == 0)
-                                            {
-                                                text = text.Remove(ind, 4);
-                                                text = text.Insert(ind, "\t");
-                                                instring = false;
-                                                goto reset;
-                                            }
-                                        }
-                                        ind++;
-                                    }
-                                    tab.scintilla.Lines[lineind].Text = text;
-                                }
-                            }
-                        }
-                    }
-                }
+                settings.ReadSettings();
             }
             catch (Exception ex) { CaughtException(ex); }
         }
@@ -563,6 +366,244 @@ namespace PAWNEdit
         public void CaughtException(Exception ex)
         {
             MessageBox.Show("Exception:\n" + ex.Message + "\n______________\n" + ex.InnerException + "\n______________\n" + ex.Source + "\n______________\n" + ex.StackTrace + "\n______________\n" + ex.TargetSite + "\n______________\n" + ex.Data);
+        }
+
+        // Events
+        private void newTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                tabs.NewTab();
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void closeTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (tabControl1.SelectedIndex > -1)
+                {
+                    tabs.CloseTab(tabControl1.SelectedTab);
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void closeEveryTabButCurrentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex > -1)
+            {
+                try
+                {
+                    TabPage cur = tabControl1.SelectedTab;
+                reiterate:
+                    foreach (Tabs.Tab_t tab in tabs.tabs)
+                    {
+                        if (tab.page != cur)
+                        {
+                            tabs.CloseTab(tab.page);
+                            goto reiterate;
+                        }
+                    }
+                    tabControl1.SelectedTab = cur;
+                }
+                catch (Exception ex) { CaughtException(ex); }
+            }
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        Thread proc = new Thread(() => build.BuildFile(tab.build, tab.Filename, tab.Filedir));
+                        proc.Start();
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+
+        private void removeExcessSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        string text = null;
+                        for (int lineind = 0; lineind < tab.scintilla.Lines.Count; lineind++)
+                        {
+                            text = tab.scintilla.Lines[lineind].Text;
+                            if (text.Length > 0)
+                            {
+                                if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
+                                if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
+                                while (text.EndsWith(" ") || text.EndsWith("\t"))
+                                {
+                                    if (text.Length < 1) break;
+                                    text = text.Substring(0, text.Length - 1);
+                                }
+                                tab.scintilla.Lines[lineind].Text = text;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void indentCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        IndentScintillaText(tab.scintilla);
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+
+        private void unIndentCoolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        UnIndentScintillaText(tab.scintilla);
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void replace4SpacesWithTabsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage cur = tabControl1.SelectedTab;
+                foreach (Tabs.Tab_t tab in tabs.tabs)
+                {
+                    if (tab.page == cur)
+                    {
+                        string text = null;
+                        bool streamcomment = false;
+                        bool instring = false;
+                        int ind = 0;
+                        for (int lineind = 0; lineind < tab.scintilla.Lines.Count; lineind++)
+                        {
+                            text = tab.scintilla.Lines[lineind].Text;
+                            if (text.Length > 0)
+                            {
+                                // Fixes for comments.
+                                if (text.StartsWith("//"))
+                                {
+                                    continue;
+                                }
+                                if (text.IndexOf("/*") != -1 && text.IndexOf("*/") == -1)
+                                {
+                                    streamcomment = true;
+                                }
+                                else if (text.IndexOf("*/") != -1 && text.IndexOf("/*") == -1)
+                                {
+                                    streamcomment = false;
+                                }
+                                if (!streamcomment)
+                                {
+                                    // Remove new lines for the local variable.
+                                    if (text.EndsWith("\r\n")) text = text.Substring(0, text.Length - 2);
+                                    if (text.EndsWith("\n")) text = text.Substring(0, text.Length - 1);
+
+                                reset:
+                                    ind = 0;
+                                    foreach (char ch in text)
+                                    {
+                                        if (text.Length > 0)
+                                        {
+                                            if (ch == '\"')
+                                            {
+                                                if (instring)
+                                                {
+                                                    instring = false;
+                                                }
+                                                else
+                                                {
+                                                    instring = true;
+                                                }
+                                            }
+                                        }
+                                        if (text.Length > ind + 4 && !instring)
+                                        {
+                                            if (text.Substring(ind, 4).CompareTo("    ") == 0)
+                                            {
+                                                text = text.Remove(ind, 4);
+                                                text = text.Insert(ind, "\t");
+                                                instring = false;
+                                                goto reset;
+                                            }
+                                        }
+                                        ind++;
+                                    }
+                                    tab.scintilla.Lines[lineind].Text = text;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                settings.WriteSettings();
+            }
+            catch (Exception ex) { CaughtException(ex); }
+        }
+
+        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fontDialog1.Font = settings.settings.defaulttext.font;
+            fontDialog1.ShowDialog();
+            settings.settings.defaulttext.font = fontDialog1.Font;
+            tabs.UpdateTabs();
+        }
+
+        private void foreColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = settings.settings.defaulttext.forecolor;
+            colorDialog1.ShowDialog();
+            settings.settings.defaulttext.forecolor = colorDialog1.Color;
+            tabs.UpdateTabs();
+        }
+
+        private void backColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorDialog1.Color = settings.settings.defaulttext.backcolor;
+            colorDialog1.ShowDialog();
+            settings.settings.defaulttext.backcolor = colorDialog1.Color;
+            tabs.UpdateTabs();
         }
     }
 }
