@@ -20,7 +20,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using ScintillaNET;
 
 namespace PAWNEdit
 {
@@ -576,29 +575,6 @@ namespace PAWNEdit
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result;
-            TextWriter tw;
-            foreach (Tabs.Tab_t tab in tabs.tabs)
-            {
-                if (tab.fChanged) //Always seems to be true, also looking into that later.
-                {
-                    result = MessageBox.Show(
-                               tab.Filename + " was Modified." +
-                               "\r\n" +
-                               "Save changes?",
-                               "Closing", MessageBoxButtons.YesNo,
-                               MessageBoxIcon.Question,
-                               MessageBoxDefaultButton.Button2);
-                    if (result == System.Windows.Forms.DialogResult.Yes){
-                        try{
-                            tw = new StreamWriter(tab.Filedir);
-                            tw.Write(tab.scintilla.Text);
-                            tw.Close();
-                        }
-                        catch (Exception ex) { CaughtException(ex); }
-                    }
-                }
-            }
             try
             {
                 settings.WriteSettings();
@@ -628,98 +604,6 @@ namespace PAWNEdit
             colorDialog1.ShowDialog();
             settings.settings.defaulttext.backcolor = colorDialog1.Color;
             tabs.UpdateTabs();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult result;
-            TextReader tr;
-            string FileName = null;
-            string Name = null;
-
-            openFileDialog1.Filter = "Pawno (*.pwn)|*.pwn";
-            openFileDialog1.FileName = "";
-            openFileDialog1.InitialDirectory = 
-                        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                        //Environment.GetFolderPath(Environment.SpecialFolder.Desktop); incase you wanna go for the desktop.
-                        //Directory.GetCurrentDirectory() for the directory of the project.
-            openFileDialog1.Title = "Open File";
-
-            result = openFileDialog1.ShowDialog();
-            if(result == System.Windows.Forms.DialogResult.OK){
-                FileName = openFileDialog1.FileName;
-                Name = openFileDialog1.SafeFileName;
-            }else{ //They cancelled the opening procedure.
-                return;
-            }
-            try{
-                tabs.NewTab();
-                tr = new StreamReader(FileName);
-                TabPage cur = tabControl1.SelectedTab;
-                foreach (Tabs.Tab_t tab in tabs.tabs)
-                {
-                    if (tab.page == cur)
-                    {
-                        tab.page.Text = Name;
-                        tab.scintilla.Text = tr.ReadToEnd();
-                        tab.Filename = Name;
-                        tab.Filedir = FileName;
-                        tab.fChanged = false;
-                    }
-                }
-                tr.Close();
-            }
-            catch (Exception ex) { CaughtException(ex); }
-        }
-
-        public void scintilla_TextChanged(object sender, EventArgs e)
-        {
-            TabPage cur = tabControl1.SelectedTab;
-            foreach (Tabs.Tab_t tab in tabs.tabs)
-            {
-                if (tab.page == cur)
-                {
-                    tab.fChanged = true;
-                }
-            }
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TabPage cur = tabControl1.SelectedTab;
-            TextWriter tw;
-            DialogResult result;
-            String FileName = null;
-            foreach (Tabs.Tab_t tab in tabs.tabs)
-            {
-                if (tab.page == cur)
-                {
-                    if (!tab.fChanged) return;
-                    if(tab.Filedir == ""){ //This doesn't seem to be right, i'll look into it later.
-                        saveFileDialog1.Filter = "Pawno (*.pwn)|*.pwn";
-                        saveFileDialog1.FileName = "";
-                        saveFileDialog1.InitialDirectory = 
-                                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                        saveFileDialog1.Title = "Save";
-                        result = saveFileDialog1.ShowDialog(); 
-                        if (result == System.Windows.Forms.DialogResult.OK) 
-                        {
-                            FileName = saveFileDialog1.FileName; 
-                        } 
-                        else 
-                        { 
-                            return; 
-                        }
-                    }
-                    try{
-                        tw = new StreamWriter(tab.Filedir);
-                        tw.Write(tab.scintilla.Text);
-                        tw.Close();
-                        tab.fChanged = false;
-                    }
-                    catch (Exception ex) { CaughtException(ex); }
-                }
-            }
         }
     }
 }

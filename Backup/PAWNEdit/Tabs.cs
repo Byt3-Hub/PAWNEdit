@@ -36,7 +36,6 @@ namespace PAWNEdit
             // File info
             public string Filename;
             public string Filedir;
-            public Boolean fChanged; //To check it the file was saved (saving purpose).
         };
 
         public List<Tab_t> tabs = new List<Tab_t>();
@@ -112,7 +111,6 @@ namespace PAWNEdit
                 newtab.scintilla.Size = new System.Drawing.Size(567, 356);
                 newtab.scintilla.TabIndex = 2;
                 newtab.scintilla.Indentation.TabWidth = 4;
-                newtab.scintilla.TextChanged += mainform.scintilla_TextChanged;
 
                 // Style list - http://scintillanet.codeplex.com/SourceControl/changeset/view/99922#1941361
                 newtab.scintilla.ConfigurationManager.Language = "cpp"; // Make this Pawn later.
@@ -127,15 +125,14 @@ namespace PAWNEdit
 
                 mainform.tabControl1.TabPages.Add(newtab.page);
 
-                newtab.Filename = ""; //what was this lol?
-                newtab.Filedir = "";
+                newtab.Filename = "bare.pwn";
+                newtab.Filedir = "C:\\Users\\Byt3\\Desktop\\SA-MP\\Test\\gamemodes";
 
                 tabs.Add(newtab);
 
                 mainform.tabControl1.SelectedIndex++;
 
                 UpdateTabs();
-                newtab.fChanged = false;
             }
             catch (Exception ex) { mainform.CaughtException(ex); }
         }
@@ -221,9 +218,9 @@ namespace PAWNEdit
                         tab.scintilla.Styles[10].BackColor = settings.settings.operat.backcolor;
 
                         // Identifier
-                        //tab.scintilla.Styles[11].Font = settings.settings.identifier.font;
-                        //tab.scintilla.Styles[11].ForeColor = settings.settings.identifier.forecolor;
-                        //tab.scintilla.Styles[11].BackColor = settings.settings.identifier.backcolor;
+                        tab.scintilla.Styles[11].Font = settings.settings.identifier.font;
+                        tab.scintilla.Styles[11].ForeColor = settings.settings.identifier.forecolor;
+                        tab.scintilla.Styles[11].BackColor = settings.settings.identifier.backcolor;
 
                         // String EOL
                         tab.scintilla.Styles[12].Font = settings.settings.stringeol.font;

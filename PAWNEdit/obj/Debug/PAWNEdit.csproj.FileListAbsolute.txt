@@ -8,3 +8,13 @@ C:\Users\Byt3\Desktop\Git Repositories\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.Prop
 C:\Users\Byt3\Desktop\Git Repositories\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.csproj.GenerateResource.Cache
 C:\Users\Byt3\Desktop\Git Repositories\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.exe
 C:\Users\Byt3\Desktop\Git Repositories\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.pdb
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.exe
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.pdb
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\bin\Debug\SciLexer.dll
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\bin\Debug\PAWNEdit.exe
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\bin\Debug\PAWNEdit.pdb
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\bin\Debug\ScintillaNET.dll
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.csprojResolveAssemblyReference.cache
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.Form1.resources
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.Properties.Resources.resources
+C:\Users\Laurens\Documents\GitHub\PAWNEdit\PAWNEdit\obj\Debug\PAWNEdit.csproj.GenerateResource.Cache

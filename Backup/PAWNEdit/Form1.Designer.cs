@@ -172,8 +172,6 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -417,14 +415,12 @@
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -708,7 +704,7 @@
             this.regularExpressionToolStripMenuItem,
             this.documentStreamCommentToolStripMenuItem});
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fontToolStripMenuItem.Text = "Font";
             // 
             // defaultToolStripMenuItem
@@ -821,7 +817,7 @@
             this.toolStripMenuItem15,
             this.toolStripMenuItem16});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(135, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem1.Text = "Colors";
             // 
             // toolStripMenuItem2
@@ -1144,13 +1140,13 @@
             // indentationToolStripMenuItem
             // 
             this.indentationToolStripMenuItem.Name = "indentationToolStripMenuItem";
-            this.indentationToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.indentationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.indentationToolStripMenuItem.Text = "Indentation";
             // 
             // otherToolStripMenuItem
             // 
             this.otherToolStripMenuItem.Name = "otherToolStripMenuItem";
-            this.otherToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.otherToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.otherToolStripMenuItem.Text = "Other";
             // 
             // toolStripSeparator9
@@ -1252,12 +1248,8 @@
             "bare.pwn"});
             this.listBox1.Location = new System.Drawing.Point(3, 16);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(194, 181);
+            this.listBox1.Size = new System.Drawing.Size(194, 169);
             this.listBox1.TabIndex = 0;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -1435,8 +1427,6 @@
         private System.Windows.Forms.ToolStripMenuItem fColorToolStripMenuItem9;
         private System.Windows.Forms.ToolStripMenuItem bColorToolStripMenuItem10;
         private System.Windows.Forms.ToolStripMenuItem bColorToolStripMenuItem11;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
